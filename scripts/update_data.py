@@ -8,7 +8,7 @@ import sys, os, re, json, zlib, base64, datetime, time, urllib.request, urllib.p
 CHUNK = 400
 EPOCH = datetime.date(1970, 1, 1)
 UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36'
-NAVALL_URLS = ['https://portal.amfiindia.com/spages/NAVAll.txt', 'https://www.amfiindia.com/spages/NAVAll.txt']
+NAVALL_URLS = ['https://portal.amfiindia.com/spages/NAVAll.txt', 'https://www.amfiindia.com/spages/NAVAll.txt', 'http://portal.amfiindia.com/spages/NAVAll.txt', 'https://www.amfiindia.com/spages/NAVAll.txt?t=1']
 HIST_URL = 'https://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx'
 HIST_VARIANTS = [{}, {'mf': '-1'}, {'mf': '-1', 'tp': '1'}, {'mf': '0'}]
 
@@ -99,12 +99,15 @@ def fetch(url, tries=3):
     last = None
     for k in range(tries):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent': UA, 'Accept': '*/*'})
-            with urllib.request.urlopen(req, timeout=180) as r:
-                return r.read().decode('utf-8', 'replace')
+            req = urllib.request.Request(url, headers={'User-Agent': UA, 'Accept': 'text/plain,text/html,*/*;q=0.8', 'Accept-Language': 'en-IN,en;q=0.9', 'Referer': 'https://www.amfiindia.com/'})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                raw = r.read()
+                txt = raw.decode('utf-8', 'replace')
+                print('  GET', url.split('?')[0], '->', r.status, r.headers.get('Content-Type'), len(raw), 'bytes')
+                return txt
         except Exception as e:
-            last = e; time.sleep(3 * (k + 1))
-    print('  fetch failed:', url, last); return None
+            last = e; print('  GET', url.split('?')[0], 'failed:', repr(e)[:200]); time.sleep(2 * (k + 1))
+    return None
 
 def count(text):
     return sum(1 for _ in parse_amfi(text)) if text else 0
@@ -114,7 +117,8 @@ def fetch_history(d0, d1):
     for v in HIST_VARIANTS:
         q = dict(v); q.update({'frmdt': f, 'todt': t})
         url = HIST_URL + '?' + urllib.parse.urlencode(q)
-        txt = fetch(url, tries=2)
+        txt = fetch(url, tries=1)
+        if txt and count(txt) < 500: print('    got', count(txt), 'rows; start of reply:', repr(txt[:250]))
         if txt and count(txt) >= 500:
             print('  history', f, 'to', t, 'ok with', v or 'no extra parameters'); return txt
     print('  history', f, 'to', t, 'could not be fetched'); return None
@@ -161,12 +165,17 @@ def main():
         if failed: print('WARNING: part of the history could not be downloaded; there may be a gap until the next run.')
         tx = None
         for u in NAVALL_URLS:
-            tx = fetch(u)
+            tx = fetch(u, tries=2)
             if tx and count(tx) >= 500: break
+            if tx: print('    got', count(tx), 'rows; start of reply:', repr(tx[:250]))
             tx = None
         if tx is None:
-            print('ERROR: could not download the daily AMFI file.')
-            if not texts: sys.exit(1)
+            print('::error::Could not download the daily AMFI file. The page is published with the data it already has.')
+            if not texts:
+                out = os.environ.get('GITHUB_OUTPUT')
+                if out:
+                    with open(out, 'a') as f: f.write('changed=false\n')
+                return
         else:
             texts.append(tx)
 
@@ -242,3 +251,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
