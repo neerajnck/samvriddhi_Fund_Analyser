@@ -11,6 +11,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <symbol id="i-find" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-market" viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8h7M8.5 12h2M13.5 12h2M8.5 16h2M13.5 16h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15l3.6-4 3 2.6L19 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-proj" viewBox="0 0 24 24"><path d="M4 18l5-5 3.5 3L20 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h5.2v5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -39,12 +40,13 @@
       <span class="wm"><span class="w1">SAMVRIDDHI</span><span class="w2"><i></i>FINANCE</span></span>
     </div>
     <nav class="tabs" id="tabs" aria-label="Sections">
-      <button type="button" data-tab="find" aria-current="false"><svg><use href="#i-find"/></svg><span>Find a fund</span></button>
-      <button type="button" data-tab="calc" aria-current="true"><svg><use href="#i-calc"/></svg><span>Calculator</span></button>
+      <button type="button" data-tab="find" aria-current="true"><svg><use href="#i-find"/></svg><span>Find a fund</span></button>
+      <button type="button" data-tab="market" aria-current="false" id="navMarket"><svg><use href="#i-market"/></svg><span>Market today</span></button>
+      <button type="button" data-tab="calc" aria-current="false"><svg><use href="#i-calc"/></svg><span>Calculator</span></button>
       <button type="button" data-tab="chart" aria-current="false"><svg><use href="#i-chart"/></svg><span>Chart</span></button>
       <button type="button" data-tab="proj" aria-current="false"><svg><use href="#i-proj"/></svg><span>Projection</span></button>
       <button type="button" data-tab="table" aria-current="false"><svg><use href="#i-table"/></svg><span>Table</span></button>
-      <button type="button" data-tab="about" aria-current="false"><svg><use href="#i-about"/></svg><span>About the fund</span></button>
+      <button type="button" data-tab="about" aria-current="false"><svg><use href="#i-about"/></svg><span>About fund</span></button>
     </nav>
     <div class="side-foot">
       <span class="badge" id="badge">Loading…</span>
@@ -57,17 +59,21 @@
     <section class="panel" id="head" aria-live="polite"><div class="status"><span class="spin"></span><span>Unpacking fund data…</span></div></section>
 
     <main class="tabpanels">
-      <section class="tab" id="tab-find" data-panel="find" hidden>
+      <section class="tab" id="tab-find" data-panel="find">
         <p class="notice" id="banner"></p>
         <div class="panel funds" aria-label="Find a fund">
           <h2>Find a fund</h2>
           <p class="sub">Type any part of a fund name, fund house or category, then tap the fund.</p>
           <input id="q" class="search" type="search" placeholder="Search any fund, fund house or category" aria-label="Search mutual funds" autocomplete="off" disabled>
           <div class="rowtools" id="pop"></div>
+          <div class="browse">
+            <p class="bl">Browse by type</p>
+            <div class="grp" id="grpRow" role="group" aria-label="Fund type"></div>
+            <div class="subs" id="subRow" role="group" aria-label="Fund category"></div>
+          </div>
           <details class="filt" id="filt" open><summary>Filters</summary>
-          <div class="filtgrid">
+          <div class="filtgrid one">
             <div class="field"><label for="amc">Fund house</label><select id="amc" class="inp"><option value="-1">All fund houses</option></select></div>
-            <div class="field"><label for="cat">Category</label><select id="cat" class="inp"><option value="-1">All categories</option></select></div>
           </div>
           <div class="rowtools">
             <div class="seg" role="group" aria-label="Plan type" id="planSeg">
@@ -85,7 +91,27 @@
         </div>
       </section>
 
-      <section class="tab col" id="tab-calc" data-panel="calc">
+      <section class="tab col" id="tab-market" data-panel="market" hidden>
+        <div class="panel">
+          <h2>Market today</h2>
+          <p class="sub" id="mvSub">Biggest movers by category, from the latest NAVs published by AMFI.</p>
+          <input id="mvQ" class="search" type="search" placeholder="Search any fund, fund house or category" aria-label="Search mutual funds" autocomplete="off">
+          <div id="mvRes" class="list" hidden></div>
+          <div id="mvMovers">
+          <div class="mvtools">
+            <div class="field"><label for="mvCat">Category</label><select id="mvCat" class="inp"></select></div>
+            <div class="seg" role="group" aria-label="Plan type" id="mvPlan">
+              <button type="button" data-mp="direct" aria-pressed="true">Direct plans</button>
+              <button type="button" data-mp="regular" aria-pressed="false">Regular plans</button>
+            </div>
+          </div>
+          <div id="mvBody"><div class="status"><span class="spin"></span><span>Loading…</span></div></div>
+          </div>
+          <p class="disc">Based on the NAVs published by AMFI India for the latest available day (change compared with each fund's previous NAV). One day's move says little about a fund. Growth options only. Mutual fund investments are subject to market risks. Read all scheme related documents carefully. Past performance does not guarantee future returns. This is information, not a recommendation or investment advice.</p>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-calc" data-panel="calc" hidden>
         <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
         <div class="rd col" hidden>
           <section class="panel" id="calc">
@@ -245,7 +271,7 @@ var BUILD='{{BUILD}}';            // 'full' = downloadable app (active funds), '
 var REMOTE=BUILD==='web',VER='0';   // 'web' = small page that loads its data from the server
 var LIVE=BUILD==='full'||BUILD==='mobile';   // try to add newer NAVs from the internet
 var CHUNK={{CHUNKSIZE}};
-var POPULAR=['Parag Parikh Flexi Cap','HDFC Flexi Cap','SBI Bluechip','Nippon India Small Cap','UTI Nifty 50 Index','Kotak Emerging Equity','ICICI Prudential Bluechip','Axis Midcap'];
+var POPULAR=[];
 var $=function(s,r){return(r||document).querySelector(s);};
 
 // ==CORE START==
@@ -255,8 +281,8 @@ var $=function(s,r){return(r||document).querySelector(s);};
 /*{{FMT}}*/
 
 /* ---------- state ---------- */
-var S={stop:'',stopAuto:true,q:'',amc:-1,cat:-1,plan:'all',growth:false,hideDead:false,shown:100,fund:null,mode:'sip',amount:10000,start:'',end:'',view:'monthly',horizon:5,hlabel:'5 years',cont:true,cv:'all',cpick:null};
-var ROWS=[],AMCS=[],CATS=[],DATA_END=0,results=[],LAST=null,loadSeq=0,liveMsg='',liveKind='',chunkLines={},searchTimer=null;
+var S={grp:'all',stop:'',stopAuto:true,q:'',amc:-1,cat:-1,plan:'all',growth:false,hideDead:false,shown:100,fund:null,mode:'sip',amount:10000,start:'',end:'',view:'monthly',horizon:5,hlabel:'5 years',cont:true,cv:'all',cpick:null};
+var BYCODE={},MV=null,ROWS=[],AMCS=[],CATS=[],DATA_END=0,results=[],LAST=null,loadSeq=0,liveMsg='',liveKind='',chunkLines={},searchTimer=null;
 
 /*{{MAINUPD}}*/
 
@@ -309,8 +335,36 @@ function loadHistory(row){
 /* ---------- search & list ---------- */
 function catShort(c){return String(c).replace(/ Scheme - /,' · ').replace(/\s+/g,' ').trim();}
 function aumText(a){return a==null?'':(a>=100?'₹'+IN.format(Math.round(a)):'₹'+a.toFixed(1))+' Cr';}
+var GROUPS=['Equity','Debt','Hybrid','Solution Oriented','Other'],GNAME={'Other':'Index, ETF & FoF'},CANON=[],CATK=[];
+function gName(g){return GNAME[g]||g;}
+function normCat(c){
+  var s=String(c).replace(/\s+/g,' ').trim(),l=s.toLowerCase(),m=s.match(/^(.*?) - (.*)$/),head=m?m[1].toLowerCase():l,rest=m?m[2]:s,r=rest.toLowerCase(),g='Other',lab;
+  if(/^equity schemes?$/.test(head)||l==='elss')g='Equity';
+  else if(/^debt scheme$|^income\/debt oriented schemes$/.test(head)||l==='income'||l==='money market')g='Debt';
+  else if(/^hybrid schemes?$/.test(head))g='Hybrid';
+  else if(/^solution oriented scheme$|^life cycle funds$/.test(head))g='Solution Oriented';
+  var strip=function(x){return x.replace(/ funds?$/i,'');};
+  if(g==='Equity')lab=/elss/.test(r)?'ELSS (Tax Saver)':/sectoral|thematic/.test(r)?'Sectoral / Thematic':strip(rest);
+  else if(g==='Debt')lab=r==='income'?'Income':/banking/.test(r)?'Banking and PSU':/dynamic/.test(r)?'Dynamic Bond':/gilt.*10 year/.test(r)?'Gilt (10-year constant duration)':/ultra short/.test(r)?'Ultra Short Duration':/medium to long/.test(r)?'Medium to Long Duration':/medium/.test(r)?'Medium Duration':/short/.test(r)?'Short Duration':strip(rest);
+  else if(g==='Hybrid')lab=/balanced advantage|dynamic asset/.test(r)?'Balanced Advantage':/multi asset/.test(r)?'Multi Asset Allocation':/equity savings/.test(r)?'Equity Savings':strip(rest);
+  else if(g==='Solution Oriented')lab=/children/.test(r)?'Children’s':/retire/.test(r)?'Retirement':/life cycle/.test(r)?'Life Cycle':strip(rest);
+  else lab=/overseas/.test(l)?'Fund of Funds (Overseas)':/fund of funds|fof/.test(l)?'Fund of Funds (Domestic)':/index/.test(l)?'Index Funds':/gold etf/.test(l)?'Gold ETFs':/etf/.test(l)?'Other ETFs':strip(rest);
+  return{g:g,l:lab};
+}
+function canonLabel(i){return gName(CANON[i].g)+' · '+CANON[i].l;}
+function renderBrowse(tg,tc){
+  var tot=0;GROUPS.forEach(function(g){tot+=tg[g]||0;});
+  $('#grpRow').innerHTML='<button type="button" class="gchip" data-g="all" aria-pressed="'+(S.grp==='all')+'">All <small>'+IN.format(tot)+'</small></button>'+
+    GROUPS.filter(function(g){return tg[g];}).map(function(g){return'<button type="button" class="gchip" data-g="'+g+'" aria-pressed="'+(S.grp===g)+'">'+esc(gName(g))+' <small>'+IN.format(tg[g])+'</small></button>';}).join('');
+  var sr=$('#subRow');
+  if(S.grp==='all'){sr.hidden=true;sr.innerHTML='';return;}
+  var ids=Object.keys(tc).map(Number).sort(function(a,b){return CANON[a].l<CANON[b].l?-1:1;});
+  sr.hidden=false;
+  sr.innerHTML='<button type="button" class="chip" data-c="-1" aria-pressed="'+(S.cat<0)+'">All '+esc(gName(S.grp))+'</button>'+
+    ids.map(function(c){return'<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(S.cat===c)+'">'+esc(CANON[c].l)+' <small>'+IN.format(tc[c])+'</small></button>';}).join('');
+}
 function runSearch(){
-  var q=S.q.trim().toLowerCase(),toks=q.split(/\s+/).filter(Boolean),out=[];
+  var q=S.q.trim().toLowerCase(),toks=q.split(/\s+/).filter(Boolean),out=[],tg={},tc={};
   for(var k=0;k<ROWS.length;k++){
     var r=ROWS[k];
     if(S.growth&&r.opt===1)continue;
@@ -318,10 +372,15 @@ function runSearch(){
     if(S.plan==='direct'&&!r.direct)continue;
     if(S.plan==='regular'&&r.direct)continue;
     if(S.amc>=0&&r.amc!==S.amc)continue;
-    if(S.cat>=0&&r.cat!==S.cat)continue;
     var ok=true;for(var t=0;t<toks.length;t++){if(r.key.indexOf(toks[t])<0){ok=false;break;}}
-    if(ok)out.push(r);
+    if(!ok)continue;
+    var g=CANON[r.ck].g;tg[g]=(tg[g]||0)+1;
+    if(S.grp!=='all'&&g!==S.grp)continue;
+    tc[r.ck]=(tc[r.ck]||0)+1;
+    if(S.cat>=0&&r.ck!==S.cat)continue;
+    out.push(r);
   }
+  renderBrowse(tg,tc);
   out.sort(function(a,b){
     if(a.dead!==b.dead)return a.dead?1:-1;
     if((a.opt===1)!==(b.opt===1))return a.opt===1?1:-1;
@@ -340,11 +399,64 @@ function renderList(){
   $('#list').innerHTML=results.slice(0,lim).map(function(r){
     var cur=S.fund&&S.fund.row===r;
     return'<button type="button" class="fund" data-i="'+r.i+'" aria-current="'+cur+'"><span class="fname">'+esc(r.name)+'</span>'+
-      '<span class="fmeta">'+esc(AMCS[r.amc])+' · '+esc(catShort(CATS[r.cat]))+(r.opt===1?' <span class="tagp">IDCW</span>':'')+(r.dead?' <span class="tagp">No recent NAV</span>':'')+'</span>'+
+      '<span class="fmeta">'+esc(AMCS[r.amc])+' · '+esc(canonLabel(r.ck))+(r.opt===1?' <span class="tagp">IDCW</span>':'')+(r.dead?' <span class="tagp">No recent NAV</span>':'')+'</span>'+
       '<span class="fret">'+(r.aum!=null?aumText(r.aum)+'<small>avg. AUM</small>':'')+'</span></button>';
   }).join('');
   more.hidden=total<=lim;
   if(total>lim)more.textContent='Show '+Math.min(100,total-lim)+' more ('+IN.format(total-lim)+' left)';
+}
+
+/* ---------- market today ---------- */
+function getMovers(){
+  if(MV)return Promise.resolve(MV);
+  return fetch('data/movers.bin?v='+encodeURIComponent(VER)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer();})
+    .then(function(b){return inflate(new Uint8Array(b));}).then(function(u){MV=JSON.parse(new TextDecoder().decode(u));return MV;});
+}
+function mvSearch(){
+  var q=$('#mvQ').value.trim().toLowerCase(),res=$('#mvRes'),mv=$('#mvMovers');
+  if(!q){res.hidden=true;mv.hidden=false;return;}
+  var toks=q.split(/\s+/),out=[];
+  for(var k=0;k<ROWS.length;k++){var r=ROWS[k],ok=true;for(var t=0;t<toks.length;t++){if(r.key.indexOf(toks[t])<0){ok=false;break;}}if(ok)out.push(r);}
+  out.sort(function(a,b){
+    if(a.dead!==b.dead)return a.dead?1:-1;
+    if((a.opt===1)!==(b.opt===1))return a.opt===1?1:-1;
+    var pa=a.lname.indexOf(q)===0?0:1,pb=b.lname.indexOf(q)===0?0:1;if(pa!==pb)return pa-pb;
+    return a.lname<b.lname?-1:a.lname>b.lname?1:0;
+  });
+  mv.hidden=true;res.hidden=false;
+  res.innerHTML=out.length?out.slice(0,30).map(function(r){return'<button type="button" class="fund" data-i="'+r.i+'"><span class="fname">'+esc(r.name)+'</span><span class="fmeta">'+esc(AMCS[r.amc])+' · '+esc(canonLabel(r.ck))+(r.opt===1?' <span class="tagp">IDCW</span>':'')+(r.dead?' <span class="tagp">No recent NAV</span>':'')+'</span></button>';}).join('')+(out.length>30?'<p class="fine" style="padding:8px 10px">Showing 30 of '+IN.format(out.length)+'. Type more to narrow it down.</p>':''):'<p class="fine" style="padding:8px 10px">Nothing matches. Try fewer words.</p>';
+}
+function initMarket(){
+  var mq=0;
+  $('#mvQ').addEventListener('input',function(){clearTimeout(mq);mq=setTimeout(mvSearch,90);});
+  $('#mvQ').addEventListener('keydown',function(e){if(e.key==='Enter'){var b=$('#mvRes .fund');if(b){e.preventDefault();selectFund(ROWS[+b.dataset.i],true);}}});
+  $('#mvRes').addEventListener('click',function(e){var b=e.target.closest('[data-i]');if(b)selectFund(ROWS[+b.dataset.i],true);});
+  var cnt={};
+  ROWS.forEach(function(r){if(r.opt!==1&&!r.dead)cnt[r.ck]=(cnt[r.ck]||0)+1;});
+  var ids=Object.keys(cnt).filter(function(c){return cnt[c]>=10;}).map(Number).sort(function(a,b){return canonLabel(a)<canonLabel(b)?-1:1;});
+  var want=ids.filter(function(c){return CANON[c].g==='Equity'&&CANON[c].l==='Large Cap';})[0];
+  S.mvCat=want!=null?want:(ids[0]!=null?ids[0]:-1);S.mvPlan='direct';
+  $('#mvCat').innerHTML=ids.map(function(c){return'<option value="'+c+'">'+esc(canonLabel(c))+'</option>';}).join('');
+  $('#mvCat').value=String(S.mvCat);
+  $('#mvCat').addEventListener('change',function(e){S.mvCat=+e.target.value;renderMarket();});
+  $('#mvPlan').addEventListener('click',function(e){var b=e.target.closest('[data-mp]');if(!b)return;S.mvPlan=b.dataset.mp;document.querySelectorAll('[data-mp]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});renderMarket();});
+  $('#mvBody').addEventListener('click',function(e){var b=e.target.closest('[data-code]');if(!b)return;var r=BYCODE[+b.dataset.code];if(r)selectFund(r,true);});
+}
+function mvRow(m){
+  var r=BYCODE[m[0]];if(!r)return'';
+  var one=m[3]!=null?'1Y '+pct(m[3],1):'',three=m[4]!=null?'3Y '+pct(m[4],1)+' p.a.':'';
+  return'<button type="button" class="mvrow" data-code="'+m[0]+'"><span class="mvn"><span class="fname">'+esc(r.name)+'</span><span class="fmeta">'+esc(AMCS[r.amc])+' · NAV ₹'+IN2.format(m[1])+(one?' · '+one:'')+(three?' · '+three:'')+'</span></span><span class="mvd '+pcls(m[2])+'">'+pct(m[2])+'</span></button>';
+}
+function renderMarket(){
+  var box=$('#mvBody');
+  getMovers().then(function(d){
+    var rows=d.r.filter(function(m){var r=BYCODE[m[0]];return r&&r.ck===S.mvCat&&(S.mvPlan==='direct')===r.direct;});
+    $('#mvSub').textContent='Biggest movers by category, from the NAVs published by AMFI up to '+fmtDate(d.d)+'.';
+    if(rows.length<2){box.innerHTML='<p class="fine">Not enough funds with a recent NAV in this category and plan type.</p>';return;}
+    rows.sort(function(a,b){return b[2]-a[2];});
+    var k=Math.min(10,Math.floor(rows.length/2));
+    box.innerHTML='<div class="mvcols"><div><h3 class="mvh">Biggest gainers</h3>'+rows.slice(0,k).map(mvRow).join('')+'</div><div><h3 class="mvh">Biggest losers</h3>'+rows.slice(-k).reverse().map(mvRow).join('')+'</div></div><p class="fine">'+IN.format(rows.length)+' funds in this category and plan type. Tap a fund to open its calculator.</p>';
+  }).catch(function(){box.innerHTML='<p class="fine">Could not load today\u2019s movers. Please check your internet connection and try again.</p>';});
 }
 
 /* ---------- fund header ---------- */
@@ -384,6 +496,8 @@ function showTab(id,noScroll){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.hidden=p.dataset.panel!==id;});
   document.querySelectorAll('#tabs [data-tab]').forEach(function(b){b.setAttribute('aria-current',String(b.dataset.tab===id));});
   if(!noScroll){try{window.scrollTo(0,0);}catch(x){}}
+  $('#head').hidden=(!S.fund&&id!=='find');
+  if(id==='market')renderMarket();
   if(id==='chart'&&LAST){animateNext=true;drawChart(LAST);}
   if(id==='find'){var q=$('#q');if(q&&!q.disabled&&window.innerWidth>=960){try{q.focus({preventScroll:true});}catch(x){}}}
 }
@@ -399,7 +513,7 @@ function renderHead(){
   if(r.dead)warns.push('No NAV has been published for this scheme since '+fmtDate(lastDay)+'. It may be closed, merged or matured.');
   if(f.days.length>30&&(lastDay-f.days[0])/f.days.length>5)warns.push('This scheme’s history has gaps. Results use the nearest NAV on or after each date.');
   showHead(
-   '<div class="hrow"><div class="hname"><p class="eyebrow">'+esc(catShort(CATS[r.cat]))+' · '+esc(AMCS[r.amc])+'</p><h1>'+esc(r.name)+'</h1></div>'+
+   '<div class="hrow"><div class="hname"><p class="eyebrow">'+esc(canonLabel(r.ck))+' · '+esc(AMCS[r.amc])+'</p><h1>'+esc(r.name)+'</h1></div>'+
    '<div class="hright"><div class="navbox"><span class="lbl">Latest NAV · '+fmtDate(lastDay)+'</span><span class="navv">₹'+IN2.format(f.nav[n])+'</span>'+(st.dayChg!=null?'<span class="chg '+pcls(st.dayChg)+'">'+pct(st.dayChg)+' on the day</span>':'')+'</div>'+
    '<button type="button" class="btn" id="goSearch">Change fund</button></div></div>'
   );
@@ -580,13 +694,14 @@ function fatal(msg){
   showHead('<p class="eyebrow">Cannot start</p><p style="margin:0">'+esc(msg)+'</p>');
 }
 function wire(){
-  $('#pop').innerHTML=POPULAR.map(function(p){return'<button type="button" class="chip" data-pop="'+esc(p)+'">'+esc(p)+'</button>';}).join('');
+  $('#pop').hidden=true;
   buildPresets();
   $('#pop').addEventListener('click',function(e){var b=e.target.closest('[data-pop]');if(!b)return;S.q=b.dataset.pop;$('#q').value=S.q;runSearch();});
   $('#q').addEventListener('input',function(e){S.q=e.target.value;clearTimeout(searchTimer);searchTimer=setTimeout(runSearch,90);});
   $('#q').addEventListener('keydown',function(e){if(e.key==='Enter'&&results.length){e.preventDefault();clearTimeout(searchTimer);runSearch();if(results.length)selectFund(results[0],true);}});
   $('#amc').addEventListener('change',function(e){S.amc=+e.target.value;runSearch();});
-  $('#cat').addEventListener('change',function(e){S.cat=+e.target.value;runSearch();});
+  $('#grpRow').addEventListener('click',function(e){var b=e.target.closest('[data-g]');if(!b)return;S.grp=b.dataset.g;S.cat=-1;runSearch();});
+  $('#subRow').addEventListener('click',function(e){var b=e.target.closest('[data-c]');if(!b)return;var c=+b.dataset.c;S.cat=(S.cat===c)?-1:c;runSearch();});
   $('#planSeg').addEventListener('click',function(e){var b=e.target.closest('[data-plan]');if(!b)return;S.plan=b.dataset.plan;document.querySelectorAll('[data-plan]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});runSearch();});
   $('#growthBtn').addEventListener('click',function(e){S.growth=!S.growth;e.currentTarget.setAttribute('aria-pressed',String(S.growth));runSearch();});
   $('#inactiveBtn').addEventListener('click',function(e){S.hideDead=!S.hideDead;e.currentTarget.setAttribute('aria-pressed',String(S.hideDead));runSearch();});
@@ -668,7 +783,8 @@ function boot(){
     var ai=AMCS.map(function(_,i){return i;}).sort(function(a,b){return AMCS[a]<AMCS[b]?-1:1;});
     var ci=CATS.map(function(_,i){return i;}).sort(function(a,b){return catShort(CATS[a])<catShort(CATS[b])?-1:1;});
     $('#amc').innerHTML='<option value="-1">All fund houses ('+AMCS.length+')</option>'+ai.map(function(i){return'<option value="'+i+'">'+esc(AMCS[i])+' ('+IN.format(ac[i])+')</option>';}).join('');
-    $('#cat').innerHTML='<option value="-1">All categories ('+CATS.length+')</option>'+ci.map(function(i){return'<option value="'+i+'">'+esc(catShort(CATS[i]))+' ('+IN.format(cc[i])+')</option>';}).join('');
+    CATS.forEach(function(c,i){var n=normCat(c),k=n.g+'|'+n.l,j=-1;for(var q=0;q<CANON.length;q++){if(CANON[q].k===k){j=q;break;}}if(j<0){n.k=k;j=CANON.length;CANON.push(n);}CATK[i]=j;});
+    ROWS.forEach(function(r){r.ck=CATK[r.cat];r.key+=' '+CANON[r.ck].l.toLowerCase()+' '+gName(CANON[r.ck].g).toLowerCase();});
     $('#badge').textContent=BUILD==='archive'?IN.format(ROWS.length)+' closed or matured funds':IN.format(ROWS.length)+' funds · NAVs to '+fmtDate(DATA_END);
     $('#banner').textContent=BUILD==='web'
       ?IN.format(ROWS.length)+' active mutual fund schemes (growth and dividend options, direct and regular) with their full NAV history, up to '+fmtDate(DATA_END)+'. This page refreshes itself every evening from the NAVs that AMFI India publishes, and newly launched schemes are added as they appear. Closed and matured schemes are not included.'
@@ -683,8 +799,11 @@ function boot(){
     $('#q').disabled=false;
     wire();runSearch();
     if(REMOTE){document.addEventListener('visibilitychange',function(){if(!document.hidden)checkNew();});setInterval(checkNew,600000);$('#updbar button').addEventListener('click',function(){location.reload();});}
-    var pick=ROWS.filter(function(r){return r.lname.indexOf('parag parikh flexi cap')===0&&r.opt===0&&!r.dead;})[0]||results[0];
-    if(pick){S.q='';selectFund(pick);}
+    ROWS.forEach(function(r){BYCODE[r.code]=r;});
+    showHead('<p class="eyebrow">Samvriddhi Fund Analyser</p><h1>Search for a mutual fund to begin</h1><p class="sub" style="margin:6px 0 0">Type a fund name below, or open Market today to see how each category moved.</p>');
+    if(!REMOTE)$('#navMarket').hidden=true;
+    initMarket();
+    showTab('find',true);
   }).catch(function(e){if(REMOTE){fatal('The fund list could not be loaded. Please check your internet connection and reload the page.');return;}fatal('The fund data inside this file could not be read ('+((e&&e.message)||'unknown error')+'). Try downloading the file again.');});
 }
 boot();
