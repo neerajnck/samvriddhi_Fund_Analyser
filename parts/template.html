@@ -231,6 +231,7 @@
       </section>
     </main>
     <footer id="foot"></footer>
+    <div id="updbar" role="status" hidden><span>Newer NAVs are available.</span><button type="button" class="btn primary">Refresh now</button></div>
   </div>
 </div>
 
@@ -241,6 +242,7 @@
 (function(){
 'use strict';
 var BUILD='{{BUILD}}';            // 'full' = downloadable app (active funds), 'mobile' = smaller downloadable app for phones, 'archive' = closed and matured funds, 'lite' = Claude preview
+var REMOTE=BUILD==='web',VER='0';   // 'web' = small page that loads its data from the server
 var LIVE=BUILD==='full'||BUILD==='mobile';   // try to add newer NAVs from the internet
 var CHUNK={{CHUNKSIZE}};
 var POPULAR=['Parag Parikh Flexi Cap','HDFC Flexi Cap','SBI Bluechip','Nippon India Small Cap','UTI Nifty 50 Index','Kotak Emerging Equity','ICICI Prudential Bluechip','Axis Midcap'];
@@ -277,7 +279,26 @@ function decodeSeries(bytes,dp){
   for(i=0;i<n;i++)v[i]=v[i]/scale;
   return{days:d,nav:v};
 }
+function getVersion(){
+  return fetch('data/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();});
+}
+function getMeta(){
+  if(!REMOTE)return inflate(b64ToBytes($('#meta').textContent.trim()));
+  return getVersion().then(function(v){
+    VER=String(v.v);
+    return fetch('data/meta.bin?v='+encodeURIComponent(VER)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer();});
+  }).then(function(b){return inflate(new Uint8Array(b));});
+}
+function checkNew(){
+  if(!REMOTE||navigator.onLine===false)return;
+  getVersion().then(function(j){if(j&&j.v&&String(j.v)!==VER)$('#updbar').hidden=false;}).catch(function(){});
+}
 function loadHistory(row){
+  if(REMOTE){
+    return fetch('data/f/'+row.code+'.bin?v='+encodeURIComponent(VER)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer();})
+      .then(function(b){return inflate(new Uint8Array(b));}).then(function(bytes){return decodeSeries(bytes,row.dp);})
+      .catch(function(){throw new Error('Could not load this fund. Please check your internet connection and try again.');});
+  }
   var ci=Math.floor(row.i/CHUNK),lines=chunkLines[ci];
   if(!lines){var el=document.getElementById('h'+ci);if(!el)return Promise.reject(new Error('Data for this fund is missing from the file.'));lines=chunkLines[ci]=el.textContent.trim().split('\n');}
   var line=lines[row.i%CHUNK];
@@ -632,7 +653,8 @@ function wire(){
 }
 function boot(){
   if(typeof DecompressionStream==='undefined'||!window.Blob||!Blob.prototype.stream){fatal('This browser is too old to open the fund data. Please use a recent version of Chrome, Edge, Safari or Firefox.');return;}
-  inflate(b64ToBytes($('#meta').textContent.trim())).then(function(bytes){
+  if(REMOTE&&'serviceWorker' in navigator&&location.protocol.indexOf('http')===0){navigator.serviceWorker.register('sw.js').catch(function(){});}
+  getMeta().then(function(bytes){
     var meta=JSON.parse(new TextDecoder().decode(bytes));
     AMCS=meta.amcs;CATS=meta.cats;
     ROWS=meta.rows.map(function(r,i){
@@ -660,9 +682,10 @@ function boot(){
     $('#foot').textContent='Samvriddhi Finance · AMFI Registered Mutual Fund Distributor · ARN 371388. NAV data: AMFI India, via the open MIT-licensed Mutual_Fund_Data dataset. Scheme details may lag the fund houses’ own factsheets. Mutual fund investments are subject to market risks.';
     $('#q').disabled=false;
     wire();runSearch();
+    if(REMOTE){document.addEventListener('visibilitychange',function(){if(!document.hidden)checkNew();});setInterval(checkNew,600000);$('#updbar button').addEventListener('click',function(){location.reload();});}
     var pick=ROWS.filter(function(r){return r.lname.indexOf('parag parikh flexi cap')===0&&r.opt===0&&!r.dead;})[0]||results[0];
     if(pick){S.q='';selectFund(pick);}
-  }).catch(function(e){fatal('The fund data inside this file could not be read ('+((e&&e.message)||'unknown error')+'). Try downloading the file again.');});
+  }).catch(function(e){if(REMOTE){fatal('The fund list could not be loaded. Please check your internet connection and reload the page.');return;}fatal('The fund data inside this file could not be read ('+((e&&e.message)||'unknown error')+'). Try downloading the file again.');});
 }
 boot();
 })();

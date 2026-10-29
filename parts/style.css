@@ -354,3 +354,8 @@ h1{font:600 clamp(19px,2.2vw,24px)/1.25 var(--f-display);letter-spacing:-.01em}
 #gtip .gn{color:#D9C3C9}
 @media (prefers-reduced-motion:reduce){.gb-extra:hover{animation:none}.gbar{transition:none}}
 @media print{#gtip{display:none!important}}
+
+#updbar{position:fixed;right:20px;bottom:20px;z-index:70;display:flex;align-items:center;gap:12px;background:#2A0E16;color:#F6EFE6;border:1px solid #C9A24A;border-radius:999px;padding:8px 10px 8px 18px;box-shadow:0 8px 24px rgba(0,0,0,.3);font-size:13px}
+#updbar .btn{padding:6px 14px;border-radius:999px}
+@media (max-width:859px){#updbar{right:14px;left:14px;bottom:calc(76px + env(safe-area-inset-bottom,0px));justify-content:space-between}}
+@media print{#updbar{display:none!important}}
