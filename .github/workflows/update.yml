@@ -1,0 +1,70 @@
+name: Update NAVs and publish site
+
+on:
+  schedule:
+    - cron: '30 18 * * *'     # every day at 18:30 UTC (midnight in India)
+  workflow_dispatch:           # lets you press "Run workflow" by hand
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Get the latest saved data
+        run: |
+          mkdir -p work
+          if gh release download data-latest --pattern state.tar.gz --dir work; then
+            tar -xzf work/state.tar.gz -C work
+            echo "Using saved data from the last run"
+          else
+            mkdir -p work/payload
+            cp data/seed/* work/payload/
+            echo "First run: starting from the starter data"
+          fi
+
+      - name: Add new NAVs and new funds from AMFI
+        id: upd
+        run: python scripts/update_data.py work/payload
+
+      - name: Save the data for tomorrow
+        if: steps.upd.outputs.changed == 'true'
+        run: |
+          tar -czf work/state.tar.gz -C work payload
+          gh release view data-latest >/dev/null 2>&1 || gh release create data-latest --title "Saved NAV data" --notes "Updated automatically every day. Please do not delete."
+          gh release upload data-latest work/state.tar.gz --clobber
+
+      - name: Build the web page
+        run: python scripts/build_site.py work/payload site/index.html web
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
