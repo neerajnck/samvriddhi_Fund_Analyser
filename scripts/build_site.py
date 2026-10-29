@@ -3,7 +3,9 @@ Usage: python3 scripts/build_site.py <payload_dir> <site_dir>
 Output: site/index.html (about 300 KB), site/data/meta.bin, site/data/version.json, site/data/f/<code>.bin (one small file per fund),
         plus the service worker, manifest and icons that let the page be installed on a phone.
 """
-import re, sys, os, json, zlib, base64, hashlib, shutil, glob
+import re, sys, os, json, zlib, base64, hashlib, shutil, glob, bisect
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from update_data import decode_blob, deflate
 HERE = os.path.dirname(os.path.abspath(__file__))
 P = os.path.join(HERE, '..', 'parts')
 rd = lambda n: open(os.path.join(P, n), encoding='utf-8').read()
@@ -45,6 +47,26 @@ for f in sorted(glob.glob(f'{payload}/h*.txt'), key=lambda f: int(re.search(r'h(
 assert len(lines) >= len(rows), 'data folder is inconsistent'
 for r, line in zip(rows, lines):
     open(f'{site}/data/f/{r[0]}.bin', 'wb').write(base64.b64decode(line.strip()))
+# ---- "Market today": day change, 1 year and 3 year return for every active growth-type scheme ----
+movers = []
+end = meta['dataEnd']
+for r, line in zip(rows, lines):
+    if r[6] == 1 or r[10] < end - 3: continue          # skip dividend options and schemes without today's NAV
+    d, v = decode_blob(line)
+    if len(d) < 2 or d[-1] < end - 3: continue
+    last = v[-1] / 10 ** r[13]; prev = v[-2] / 10 ** r[13]
+    if prev <= 0: continue
+    day = last / prev - 1
+    if abs(day) > 0.3: continue                      # almost certainly a data glitch
+    def back(yrs):
+        k = bisect.bisect_right(d, d[-1] - int(365.25 * yrs)) - 1
+        return v[k] / 10 ** r[13] if k >= 0 else None
+    b1, b3 = back(1), back(3)
+    r1 = round(last / b1 - 1, 5) if b1 else None
+    r3 = round((last / b3) ** (1 / 3) - 1, 5) if b3 else None
+    movers.append([r[0], round(last, 4), round(day, 5), r1, r3])
+open(f'{site}/data/movers.bin', 'wb').write(deflate(json.dumps({'d': end, 'r': movers}, separators=(',', ':')).encode()))
+print('market today rows', len(movers))
 json.dump({'v': version, 'dataEnd': meta['dataEnd'], 'funds': len(rows)}, open(f'{site}/data/version.json', 'w'))
 open(f'{site}/.nojekyll', 'w').write('')
 size = sum(os.path.getsize(os.path.join(d, x)) for d, _, fs in os.walk(site) for x in fs)
