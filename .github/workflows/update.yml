@@ -2,7 +2,8 @@ name: Update NAVs and publish site
 
 on:
   schedule:
-    - cron: '30 18 * * *'     # every day at 18:30 UTC (midnight in India)
+    - cron: '20 14-22 * * *'  # hourly, about 8pm to 4am India time, while AMFI publishes the day's NAVs
+    - cron: '20 4 * * *'      # and once in the morning (India time) as a safety net
   workflow_dispatch:           # lets you press "Run workflow" by hand
 
 permissions:
@@ -20,6 +21,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
+    outputs:
+      publish: ${{ steps.decide.outputs.publish }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,17 +53,31 @@ jobs:
           gh release view data-latest >/dev/null 2>&1 || gh release create data-latest --title "Saved NAV data" --notes "Updated automatically every day. Please do not delete."
           gh release upload data-latest work/state.tar.gz --clobber
 
-      - name: Build the web page
-        run: python scripts/build_site.py work/payload site/index.html web
+      - name: Decide whether to publish
+        id: decide
+        run: |
+          if [ "${{ steps.upd.outputs.changed }}" = "true" ] || [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "No new NAVs this hour, nothing to publish."
+          fi
+
+      - name: Build the website
+        if: steps.decide.outputs.publish == 'true'
+        run: python scripts/build_site.py work/payload site
 
       - uses: actions/configure-pages@v5
+        if: steps.decide.outputs.publish == 'true'
 
       - uses: actions/upload-pages-artifact@v3
+        if: steps.decide.outputs.publish == 'true'
         with:
           path: site
 
   deploy:
     needs: build
+    if: needs.build.outputs.publish == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
