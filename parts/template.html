@@ -1,0 +1,670 @@
+<!--HEAD_START-->
+<title>Samvriddhi Fund Analyser</title>
+<style>
+/*{{FONTS}}*/
+</style>
+<style>
+/*{{STYLE}}*/
+</style>
+<!--HEAD_END-->
+<!--BODY_START-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-find" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8h7M8.5 12h2M13.5 12h2M8.5 16h2M13.5 16h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15l3.6-4 3 2.6L19 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-proj" viewBox="0 0 24 24"><path d="M4 18l5-5 3.5 3L20 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h5.2v5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-table" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 10h16M4 14.5h16M10 10v9" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-about" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="7.9" r="1.1" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <aside class="side">
+    <div class="lockup">
+      <svg class="mk" viewBox="21 49 41 45" role="img" aria-label="Samvriddhi Finance logo">
+        <defs>
+          <linearGradient id="gHex" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#92224A"/><stop offset="1" stop-color="#560E26"/></linearGradient>
+          <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBCF84"/><stop offset=".55" stop-color="#C9A24A"/><stop offset="1" stop-color="#A47B2A"/></linearGradient>
+          <linearGradient id="gShine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#FFF8DD" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+          <clipPath id="cBars"><path d="M32.3 81.82h4.64v-7.86H32.3zM39.27 81.82h4.64V68.96h-4.64zM46.23 81.82h4.64V63.25h-4.64z"/></clipPath>
+        </defs>
+        <path d="M41.59 51.83L58.72 61.82V81.82L41.59 91.81L24.45 81.82V61.82Z" fill="url(#gHex)" stroke="#C9A24A" stroke-width=".7" stroke-linejoin="round"/>
+        <path d="M41.59 54.63L56.32 63.22V80.42L41.59 89.01L26.86 80.42V63.22Z" fill="none" stroke="#C9A24A" stroke-opacity=".75" stroke-width=".45"/>
+        <path class="orbit" pathLength="100" d="M41.59 54.63L56.32 63.22V80.42L41.59 89.01L26.86 80.42V63.22Z" fill="none" stroke="#FFF0BE" stroke-width=".9" stroke-linecap="round"/>
+        <path d="M32.3 81.82h4.64v-7.86H32.3zM39.27 81.82h4.64V68.96h-4.64zM46.23 81.82h4.64V63.25h-4.64z" fill="url(#gGold)"/>
+        <g clip-path="url(#cBars)"><rect class="shine" x="22" y="60" width="9" height="24" fill="url(#gShine)" transform="skewX(-18)"/></g>
+      </svg>
+      <span class="rule" aria-hidden="true"></span>
+      <span class="wm"><span class="w1">SAMVRIDDHI</span><span class="w2"><i></i>FINANCE</span></span>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <button type="button" data-tab="find" aria-current="false"><svg><use href="#i-find"/></svg><span>Find a fund</span></button>
+      <button type="button" data-tab="calc" aria-current="true"><svg><use href="#i-calc"/></svg><span>Calculator</span></button>
+      <button type="button" data-tab="chart" aria-current="false"><svg><use href="#i-chart"/></svg><span>Chart</span></button>
+      <button type="button" data-tab="proj" aria-current="false"><svg><use href="#i-proj"/></svg><span>Projection</span></button>
+      <button type="button" data-tab="table" aria-current="false"><svg><use href="#i-table"/></svg><span>Table</span></button>
+      <button type="button" data-tab="about" aria-current="false"><svg><use href="#i-about"/></svg><span>About the fund</span></button>
+    </nav>
+    <div class="side-foot">
+      <span class="badge" id="badge">Loading…</span>
+      <span class="tagl">Building lasting prosperity</span>
+      <span class="arn">AMFI Registered MFD · ARN 371388</span>
+    </div>
+  </aside>
+
+  <div class="stage">
+    <section class="panel" id="head" aria-live="polite"><div class="status"><span class="spin"></span><span>Unpacking fund data…</span></div></section>
+
+    <main class="tabpanels">
+      <section class="tab" id="tab-find" data-panel="find" hidden>
+        <p class="notice" id="banner"></p>
+        <div class="panel funds" aria-label="Find a fund">
+          <h2>Find a fund</h2>
+          <p class="sub">Type any part of a fund name, fund house or category, then tap the fund.</p>
+          <input id="q" class="search" type="search" placeholder="Search any fund, fund house or category" aria-label="Search mutual funds" autocomplete="off" disabled>
+          <div class="rowtools" id="pop"></div>
+          <details class="filt" id="filt" open><summary>Filters</summary>
+          <div class="filtgrid">
+            <div class="field"><label for="amc">Fund house</label><select id="amc" class="inp"><option value="-1">All fund houses</option></select></div>
+            <div class="field"><label for="cat">Category</label><select id="cat" class="inp"><option value="-1">All categories</option></select></div>
+          </div>
+          <div class="rowtools">
+            <div class="seg" role="group" aria-label="Plan type" id="planSeg">
+              <button type="button" data-plan="all" aria-pressed="true">All plans</button>
+              <button type="button" data-plan="direct" aria-pressed="false">Direct</button>
+              <button type="button" data-plan="regular" aria-pressed="false">Regular</button>
+            </div>
+            <button type="button" class="chip" id="growthBtn" aria-pressed="false">Growth options only</button>
+            <button type="button" class="chip" id="inactiveBtn" aria-pressed="false">Hide closed or matured</button>
+          </div>
+          </details>
+          <div id="count" class="count"></div>
+          <div id="list" class="list"></div>
+          <button type="button" class="btn" id="more" hidden style="margin-top:8px;width:100%">Show more</button>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-calc" data-panel="calc">
+        <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
+        <div class="rd col" hidden>
+          <section class="panel" id="calc">
+            <div class="thead" style="margin-bottom:0">
+              <div>
+                <h2>How much would you invest?</h2>
+                <p class="sub">Choose an amount and a period. The result below changes as you go.</p>
+              </div>
+              <button type="button" class="btn" id="printBtn">Print / save as PDF</button>
+            </div>
+            <div class="seg" role="group" aria-label="Investment type">
+              <button type="button" data-mode="sip" aria-pressed="true">Monthly SIP</button>
+              <button type="button" data-mode="lump" aria-pressed="false">One-time (lump sum)</button>
+            </div>
+            <div class="presets" id="amtChips"></div>
+            <div class="controls">
+              <div class="field">
+                <label for="amt" id="amtLbl">Monthly SIP amount</label>
+                <div class="money"><span>₹</span><input id="amt" class="inp" type="number" inputmode="numeric" min="100" step="500" value="10000"></div>
+                <div class="hint" id="amtHint"></div>
+              </div>
+              <div class="field">
+                <label for="sd" id="sdLbl">SIP starts on</label>
+                <input id="sd" class="inp" type="date">
+              </div>
+              <div class="field" id="stopField">
+                <label for="stop">SIP stops on</label>
+                <input id="stop" class="inp" type="date">
+                <div class="hint">Last instalment on or before this date. <button type="button" class="linkbtn" id="stopReset" hidden>Same as value date</button></div>
+              </div>
+              <div class="field">
+                <label for="ed">Value as of</label>
+                <input id="ed" class="inp" type="date">
+                <div class="hint">The date you want to know what it is worth.</div>
+              </div>
+            </div>
+            <div class="presets" id="presets"><span class="pl">Quick range</span></div>
+            <p class="hint" id="dateNote" style="margin:10px 0 0"></p>
+            <div class="err" id="err" role="alert"></div>
+          </section>
+          <p class="printonly" id="printLine"></p>
+          <section class="panel hero rp" id="sum" aria-live="polite"></section>
+          <div id="notes"></div>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-chart" data-panel="chart" hidden>
+        <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
+        <div class="rd col" hidden>
+          <section class="panel rp">
+            <h2>Your money over time</h2>
+            <p class="sub" id="chartSub"></p>
+            <div class="cview noprint">
+              <div class="seg" role="group" aria-label="Chart period" id="cvSeg">
+                <button type="button" data-cv="all" aria-pressed="true">Whole period</button>
+                <button type="button" data-cv="year" aria-pressed="false">By year</button>
+                <button type="button" data-cv="month" aria-pressed="false">By month</button>
+              </div>
+              <div class="cvnav" id="cvNav" hidden>
+                <button type="button" class="btn" id="cvPrev" aria-label="Previous">‹</button>
+                <select id="cvPick" class="inp" aria-label="Choose year or month"></select>
+                <button type="button" class="btn" id="cvNext" aria-label="Next">›</button>
+              </div>
+            </div>
+            <div class="legend">
+              <span><i style="background:var(--series2)"></i>Amount invested</span>
+              <span><i style="background:var(--accent)"></i>Current value</span>
+            </div>
+            <div class="chartwrap">
+              <div id="chart"></div>
+              <div id="tip" role="status"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-proj" data-panel="proj" hidden>
+        <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
+        <div class="rd col" hidden>
+          <section class="panel rp">
+            <div class="phead">
+              <div>
+                <h2>Where could this go?</h2>
+                <p class="sub" style="margin:0" id="projSub"></p>
+              </div>
+              <div class="noprint" style="display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center">
+                <label class="check" id="contWrap"><input type="checkbox" id="cont" checked>Keep the SIP running</label>
+                <div class="seg" role="group" aria-label="Years ahead" id="horSeg">
+                  <button type="button" data-h="1" aria-pressed="false">1 yr</button>
+                  <button type="button" data-h="3" aria-pressed="false">3 yrs</button>
+                  <button type="button" data-h="5" aria-pressed="true">5 yrs</button>
+                  <button type="button" data-h="10" aria-pressed="false">10 yrs</button>
+                </div>
+              </div>
+            </div>
+            <div class="hcustom noprint">
+              <span class="pl">Or choose your own period</span>
+              <input id="hn" class="inp" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 18" aria-label="Number of days, months or years">
+              <select id="hu" class="inp" aria-label="Unit"><option value="d">days</option><option value="m" selected>months</option><option value="y">years</option></select>
+              <span class="pl">or until</span>
+              <input id="hd" class="inp" type="date" aria-label="Project until this date">
+            </div>
+            <div class="scen" id="scen"></div>
+            <p class="disc">These are estimates built from this fund's past returns, not a forecast. Mutual fund investments are subject to market risks. Read all scheme related documents carefully. Past performance does not guarantee future returns. This tool is for illustration and is not investment advice.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-table" data-panel="table" hidden>
+        <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
+        <div class="rd col" hidden>
+          <section class="panel rp">
+            <div class="thead">
+              <div>
+                <h2>Every NAV, value and profit</h2>
+                <p class="sub" style="margin:0" id="tableSub"></p>
+              </div>
+              <div class="seg" role="group" aria-label="Table detail" id="viewSeg">
+                <button type="button" data-view="monthly" aria-pressed="true">Monthly</button>
+                <button type="button" data-view="weekly" aria-pressed="false">Weekly</button>
+                <button type="button" data-view="daily" aria-pressed="false">Daily</button>
+              </div>
+            </div>
+            <p class="fine swipehint">Swipe the table sideways to see every column.</p>
+            <div class="tablewrap" tabindex="0" aria-label="Investment table">
+              <table>
+                <thead><tr>
+                  <th>Date</th><th>NAV (₹)</th><th>NAV change</th><th>Amount added</th><th>Units bought</th><th>Total units</th><th>Total invested</th><th>Current value</th><th>Profit / loss</th><th>Return</th>
+                </tr></thead>
+                <tbody id="tbody"></tbody>
+              </table>
+            </div>
+            <p class="fine">If a date falls on a non-trading day, units are bought at the next trading day's NAV. NAV change compares each row with the row above it.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab col" id="tab-about" data-panel="about" hidden>
+        <div class="empty" data-empty><p>Choose a fund first.</p><button type="button" class="btn primary" data-goto="find">Find a fund</button></div>
+        <div class="rd col" hidden>
+          <section class="panel" id="facts"></section>
+        </div>
+      </section>
+    </main>
+    <footer id="foot"></footer>
+  </div>
+</div>
+
+<script id="meta" type="text/plain">{{META}}</script>
+{{CHUNKS}}
+
+<script>
+(function(){
+'use strict';
+var BUILD='{{BUILD}}';            // 'full' = downloadable app (active funds), 'mobile' = smaller downloadable app for phones, 'archive' = closed and matured funds, 'lite' = Claude preview
+var LIVE=BUILD==='full'||BUILD==='mobile';   // try to add newer NAVs from the internet
+var CHUNK={{CHUNKSIZE}};
+var POPULAR=['Parag Parikh Flexi Cap','HDFC Flexi Cap','SBI Bluechip','Nippon India Small Cap','UTI Nifty 50 Index','Kotak Emerging Equity','ICICI Prudential Bluechip','Axis Midcap'];
+var $=function(s,r){return(r||document).querySelector(s);};
+
+// ==CORE START==
+/*{{CORE}}*/
+// ==CORE END==
+
+/*{{FMT}}*/
+
+/* ---------- state ---------- */
+var S={stop:'',stopAuto:true,q:'',amc:-1,cat:-1,plan:'all',growth:false,hideDead:false,shown:100,fund:null,mode:'sip',amount:10000,start:'',end:'',view:'monthly',horizon:5,hlabel:'5 years',cont:true,cv:'all',cpick:null};
+var ROWS=[],AMCS=[],CATS=[],DATA_END=0,results=[],LAST=null,loadSeq=0,liveMsg='',liveKind='',chunkLines={},searchTimer=null;
+
+/*{{MAINUPD}}*/
+
+/*{{CHARTETC}}*/
+
+/* ---------- packed data ---------- */
+function b64ToBytes(s){var bin=atob(s),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;}
+function inflate(u8){
+  var ds=new DecompressionStream('deflate-raw'),stream=new Blob([u8]).stream().pipeThrough(ds);
+  return new Response(stream).arrayBuffer().then(function(b){return new Uint8Array(b);});
+}
+function rv(b,p){var x=0,m=1,c;do{c=b[p.i++];x+=(c&127)*m;m*=128;}while(c&128);return x;}
+function decodeSeries(bytes,dp){
+  var p={i:0},n=rv(b=bytes,p),b;
+  var d=new Array(n),v=new Array(n),scale=Math.pow(10,dp),i;
+  d[0]=rv(bytes,p);
+  for(i=1;i<n;i++)d[i]=d[i-1]+rv(bytes,p);
+  var acc=rv(bytes,p);v[0]=acc;
+  for(i=1;i<n;i++){var z=rv(bytes,p);acc+=(z%2===0)?z/2:-(z+1)/2;v[i]=acc;}
+  for(i=0;i<n;i++)v[i]=v[i]/scale;
+  return{days:d,nav:v};
+}
+function loadHistory(row){
+  var ci=Math.floor(row.i/CHUNK),lines=chunkLines[ci];
+  if(!lines){var el=document.getElementById('h'+ci);if(!el)return Promise.reject(new Error('Data for this fund is missing from the file.'));lines=chunkLines[ci]=el.textContent.trim().split('\n');}
+  var line=lines[row.i%CHUNK];
+  if(!line)return Promise.reject(new Error('Data for this fund is missing from the file.'));
+  return inflate(b64ToBytes(line.trim())).then(function(bytes){return decodeSeries(bytes,row.dp);});
+}
+
+/* ---------- search & list ---------- */
+function catShort(c){return String(c).replace(/ Scheme - /,' · ').replace(/\s+/g,' ').trim();}
+function aumText(a){return a==null?'':(a>=100?'₹'+IN.format(Math.round(a)):'₹'+a.toFixed(1))+' Cr';}
+function runSearch(){
+  var q=S.q.trim().toLowerCase(),toks=q.split(/\s+/).filter(Boolean),out=[];
+  for(var k=0;k<ROWS.length;k++){
+    var r=ROWS[k];
+    if(S.growth&&r.opt===1)continue;
+    if(S.hideDead&&r.dead)continue;
+    if(S.plan==='direct'&&!r.direct)continue;
+    if(S.plan==='regular'&&r.direct)continue;
+    if(S.amc>=0&&r.amc!==S.amc)continue;
+    if(S.cat>=0&&r.cat!==S.cat)continue;
+    var ok=true;for(var t=0;t<toks.length;t++){if(r.key.indexOf(toks[t])<0){ok=false;break;}}
+    if(ok)out.push(r);
+  }
+  out.sort(function(a,b){
+    if(a.dead!==b.dead)return a.dead?1:-1;
+    if((a.opt===1)!==(b.opt===1))return a.opt===1?1:-1;
+    if(q){var pa=a.lname.indexOf(q)===0?0:1,pb=b.lname.indexOf(q)===0?0:1;if(pa!==pb)return pa-pb;}
+    return a.lname<b.lname?-1:a.lname>b.lname?1:0;
+  });
+  results=out;S.shown=100;renderList();
+}
+function renderList(){
+  var total=results.length,lim=S.shown,more=$('#more');
+  $('#count').textContent=IN.format(total)+(total===1?' fund':' funds')+' of '+IN.format(ROWS.length);
+  if(!total){
+    $('#list').innerHTML='<p class="fine" style="padding:8px 10px">Nothing matches. Try fewer words, or set the filters above back to "All".</p>';
+    more.hidden=true;return;
+  }
+  $('#list').innerHTML=results.slice(0,lim).map(function(r){
+    var cur=S.fund&&S.fund.row===r;
+    return'<button type="button" class="fund" data-i="'+r.i+'" aria-current="'+cur+'"><span class="fname">'+esc(r.name)+'</span>'+
+      '<span class="fmeta">'+esc(AMCS[r.amc])+' · '+esc(catShort(CATS[r.cat]))+(r.opt===1?' <span class="tagp">IDCW</span>':'')+(r.dead?' <span class="tagp">No recent NAV</span>':'')+'</span>'+
+      '<span class="fret">'+(r.aum!=null?aumText(r.aum)+'<small>avg. AUM</small>':'')+'</span></button>';
+  }).join('');
+  more.hidden=total<=lim;
+  if(total>lim)more.textContent='Show '+Math.min(100,total-lim)+' more ('+IN.format(total-lim)+' left)';
+}
+
+/* ---------- fund header ---------- */
+function setLive(msg,kind){liveMsg=msg;liveKind=kind;var el=$('#live');if(el){el.textContent=msg;el.setAttribute('data-k',kind);}}
+function showHead(html){$('#head').innerHTML=html;}
+var TAB='calc';
+function chartWindow(sim){
+  var seg=$('#cvSeg'),pick=$('#cvPick'),nav=$('#cvNav');
+  var a=dayToYMD(sim.dayA[0]),b=dayToYMD(sim.dayA[sim.len-1]),list=[],k;
+  if(S.cv==='year'){for(k=a[0];k<=b[0];k++)list.push(k);}
+  else if(S.cv==='month'){for(k=a[0]*12+a[1];k<=b[0]*12+b[1];k++)list.push(k);}
+  nav.hidden=S.cv==='all';
+  var out=sim;
+  if(S.cv!=='all'){
+    if(list.indexOf(S.cpick)<0)S.cpick=list[list.length-1];
+    var sig=S.cv+':'+list[0]+':'+list.length;
+    if(pick.dataset.sig!==sig){
+      pick.innerHTML=list.map(function(v){return'<option value="'+v+'">'+(S.cv==='year'?v:MON[v%12]+' '+Math.floor(v/12))+'</option>';}).join('');
+      pick.dataset.sig=sig;
+    }
+    pick.value=String(S.cpick);
+    var idx=list.indexOf(S.cpick);$('#cvPrev').disabled=idx<=0;$('#cvNext').disabled=idx>=list.length-1;
+    var lo,hi;
+    if(S.cv==='year'){lo=Date.UTC(S.cpick,0,1)/864e5;hi=Date.UTC(S.cpick+1,0,1)/864e5-1;}
+    else{var y=Math.floor(S.cpick/12),m=S.cpick%12;lo=Date.UTC(y,m,1)/864e5;hi=Date.UTC(y,m+1,1)/864e5-1;}
+    var s=-1,e=-1;
+    for(k=0;k<sim.len;k++){if(sim.dayA[k]>=lo&&sim.dayA[k]<=hi){if(s<0)s=k;e=k;}}
+    if(s>=0&&e-s>=1)out={len:e-s+1,dayA:sim.dayA.slice(s,e+1),valA:sim.valA.slice(s,e+1),invA:sim.invA.slice(s,e+1),navA:sim.navA.slice(s,e+1)};
+  }
+  $('#chartSub').textContent=fmtDate(out.dayA[0])+' to '+fmtDate(out.dayA[out.len-1])+'. Touch or hover over the chart to read any day.';
+  return out;
+}
+function redrawChart(){if(LAST){animateNext=true;drawChart(LAST);}}
+function setHorizon(years,label){S.horizon=years;S.hlabel=label;document.querySelectorAll('[data-h]').forEach(function(x){x.setAttribute('aria-pressed',String(label===(+x.dataset.h)+(+x.dataset.h===1?' year':' years')));});if(LAST)renderProjection(LAST);}
+function showTab(id,noScroll){
+  TAB=id;
+  document.querySelectorAll('[data-panel]').forEach(function(p){p.hidden=p.dataset.panel!==id;});
+  document.querySelectorAll('#tabs [data-tab]').forEach(function(b){b.setAttribute('aria-current',String(b.dataset.tab===id));});
+  if(!noScroll){try{window.scrollTo(0,0);}catch(x){}}
+  if(id==='chart'&&LAST){animateNext=true;drawChart(LAST);}
+  if(id==='find'){var q=$('#q');if(q&&!q.disabled&&window.innerWidth>=960){try{q.focus({preventScroll:true});}catch(x){}}}
+}
+function setReady(on){
+  document.querySelectorAll('.rd').forEach(function(e){e.hidden=!on;});
+  document.querySelectorAll('[data-empty]').forEach(function(e){e.hidden=on;});
+}
+function setStale(on){document.querySelectorAll('.rp').forEach(function(e){e.classList.toggle('stale',!!on);});}
+function showError(msg){setReady(false);showHead('<p class="eyebrow">Something went wrong</p><p style="margin:0">'+esc(msg)+'</p>');}
+function renderHead(){
+  var f=S.fund,r=f.row,st=f.st,n=f.days.length-1,lastDay=f.days[n],warns=[];
+  if(r.opt===1)warns.push('This is a dividend (IDCW) option. Dividends paid out are not counted, so the profit shown here is lower than what an investor actually received.');
+  if(r.dead)warns.push('No NAV has been published for this scheme since '+fmtDate(lastDay)+'. It may be closed, merged or matured.');
+  if(f.days.length>30&&(lastDay-f.days[0])/f.days.length>5)warns.push('This scheme’s history has gaps. Results use the nearest NAV on or after each date.');
+  showHead(
+   '<div class="hrow"><div class="hname"><p class="eyebrow">'+esc(catShort(CATS[r.cat]))+' · '+esc(AMCS[r.amc])+'</p><h1>'+esc(r.name)+'</h1></div>'+
+   '<div class="hright"><div class="navbox"><span class="lbl">Latest NAV · '+fmtDate(lastDay)+'</span><span class="navv">₹'+IN2.format(f.nav[n])+'</span>'+(st.dayChg!=null?'<span class="chg '+pcls(st.dayChg)+'">'+pct(st.dayChg)+' on the day</span>':'')+'</div>'+
+   '<button type="button" class="btn" id="goSearch">Change fund</button></div></div>'
+  );
+  $('#notes').innerHTML='<p class="live" id="live" data-k="'+esc(liveKind)+'">'+esc(liveMsg)+'</p>'+warns.map(function(w){return'<p class="warn">'+esc(w)+'</p>';}).join('');
+  renderFacts();
+}
+function renderFacts(){
+  var f=S.fund,r=f.row,st=f.st;
+  var since=st.since!=null?'<div><dt>Since start ('+st.years.toFixed(1)+' yrs, p.a.)</dt>'+retCell(st.since)+'</div>':'<div><dt>History</dt><dd>'+Math.max(1,Math.round(st.years*12))+' months</dd></div>';
+  $('#facts').innerHTML='<h2>About this fund</h2><p class="sub">Past returns are yearly averages measured on the saved NAVs.</p>'+
+   '<dl class="stats" style="margin-top:0;border-top:0;padding-top:0">'+
+   '<div><dt>1 year return</dt>'+retCell(st.r1)+'</div>'+
+   '<div><dt>3 year return (p.a.)</dt>'+retCell(st.r3)+'</div>'+
+   '<div><dt>5 year return (p.a.)</dt>'+retCell(st.r5)+'</div>'+since+
+   '<div><dt>Volatility (yearly)</dt><dd>'+(st.vol*100).toFixed(1)+'%</dd></div>'+
+   '<div><dt>Worst fall from a peak</dt><dd class="neg">−'+Math.abs(st.mdd*100).toFixed(1)+'%</dd></div>'+
+   (r.aum!=null?'<div><dt>Average AUM</dt><dd>'+aumText(r.aum)+'</dd></div>':'')+
+   (r.min?'<div><dt>Minimum investment</dt><dd>₹'+IN.format(r.min)+'</dd></div>':'')+
+   (r.launch?'<div><dt>Launched</dt><dd>'+fmtDate(parseISO(r.launch))+'</dd></div>':'')+
+   '</dl>';
+}
+
+/* ---------- animated result ---------- */
+var REDUCE=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),animateNext=true,heroReset=true;
+function animNum(el,to,fmt){
+  if(el._raf)cancelAnimationFrame(el._raf);
+  var from=el._cur==null?0:el._cur;
+  if(REDUCE||from===to){el._cur=to;el.textContent=fmt(to);return;}
+  var t0=null,dur=800;
+  function step(ts){
+    if(t0==null)t0=ts;
+    var p=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-p,3),v=p>=1?to:from+(to-from)*e;
+    el._cur=v;el.textContent=fmt(v);
+    if(p<1)el._raf=requestAnimationFrame(step);
+  }
+  el._raf=requestAnimationFrame(step);
+}
+function durText(d){var y=d/365.25;if(y<1){var m=Math.max(1,Math.round(d/30.44));return m+(m===1?' month':' months');}return(Math.round(y*10)/10)+(Math.round(y*10)/10===1?' year':' years');}
+function buildHero(){
+  $('#sum').innerHTML=
+   '<p class="story" id="story"></p>'+
+   '<div class="hero-nums">'+
+    '<div class="hn"><span class="k">You put in</span><span class="v" id="nInv">₹0</span><span class="s" id="sInv"></span></div>'+
+    '<div class="hn"><span class="k" id="kVal">Worth today</span><span class="v" id="nVal">₹0</span><span class="s" id="sVal"></span></div>'+
+    '<div class="hn profit"><span class="k" id="kPL">Profit</span><span class="v" id="nPL">₹0</span><span class="s"><b id="nRet"></b> on money put in · <b id="nX"></b></span></div>'+
+   '</div>'+
+   '<div class="gwrap"><div class="gbar" id="gbar" role="group"><span class="gb-base" id="gbBase" tabindex="0"></span><span class="gb-extra" id="gbExtra" tabindex="0"></span></div></div>'+
+   '<div class="gleg"><span><i class="g-base"></i><em id="lBase"></em></span><span><i id="leDot"></i><em id="lExtra"></em></span></div>';
+}
+function renderSummary(sim){
+  var n=sim.len-1,inv=sim.invA[n],val=sim.valA[n],profit=val-inv,ret=inv>0?profit/inv:0,x=simXirr(sim),first=sim.dayA[0],last=sim.dayA[n],gain=profit>=0;
+  if(!$('#nInv'))buildHero();
+  if(heroReset){
+    ['nInv','nVal','nPL','nRet'].forEach(function(id){var e=$('#'+id);if(e._raf)cancelAnimationFrame(e._raf);e._cur=0;});
+    $('#gbBase').style.width='0%';$('#gbExtra').style.width='0%';
+    void $('#gbar').offsetWidth;heroReset=false;
+  }
+  var lastInst=0;sim.inst.forEach(function(a,idx){if(days[idx]>lastInst)lastInst=days[idx];});
+  var stopped=S.mode==='sip'&&lastInst>0&&last-lastInst>31;
+  $('#story').innerHTML=(S.mode==='sip'
+      ?'Investing <b>'+money(S.amount)+'</b> every month from '+fmtDate(first)+(stopped?' to '+fmtDate(lastInst)+', then leaving it invested until '+fmtDate(last):' until '+fmtDate(last))
+      :'Investing <b>'+money(S.amount)+'</b> in one go on '+fmtDate(first)+' and holding until '+fmtDate(last))+
+    ' ('+durText(last-first)+') in <b>'+esc(S.fund.name)+'</b> would have turned into:';
+  $('#sInv').textContent=S.mode==='sip'?money(S.amount)+' × '+sim.inst.size+(sim.inst.size===1?' instalment':' instalments'):'One-time on '+fmtDate(first);
+  $('#kVal').textContent='Worth on '+fmtDate(last);
+  $('#sVal').textContent='at NAV ₹'+IN2.format(sim.navA[n]);
+  $('#kPL').textContent=gain?'Your profit':'Your loss';
+  $('#nX').textContent=x==null?'yearly return needs at least 1 year':'about '+pct(x,1)+' a year (XIRR)';
+  animNum($('#nInv'),inv,money);
+  animNum($('#nVal'),val,money);
+  animNum($('#nPL'),profit,smoney);
+  animNum($('#nRet'),ret,function(v){return pct(v,2);});
+  var pl=$('#nPL');pl.className='v '+pcls(profit);
+  if(!REDUCE){pl.classList.remove('pop');void pl.offsetWidth;pl.classList.add('pop');}
+  var total=Math.max(inv,val)||1,base=Math.min(inv,val),extra=Math.abs(val-inv);
+  $('#gbExtra').className='gb-extra '+(gain?'gain':'loss');
+  $('#leDot').className=gain?'g-gain':'g-loss';
+  $('#lBase').textContent=gain?'Money you put in':'What it is worth now';
+  $('#lExtra').textContent=gain?'Profit':'Loss';
+  $('#gbar').setAttribute('aria-label',(gain?'Profit of ':'Loss of ')+money(extra)+' on '+money(inv)+' invested');
+  var bE=$('#gbBase'),xE=$('#gbExtra');
+  if(gain){
+    bE.dataset.t='Money you put in';bE.dataset.a=money(inv);bE.dataset.n=(val>0?(inv/val*100).toFixed(1):'0')+'% of what it is worth today';
+    xE.dataset.t='Profit';xE.dataset.a=smoney(profit);xE.dataset.n=pct(ret,2)+' on the money you put in · '+(val>0?(profit/val*100).toFixed(1):'0')+'% of today\u2019s value';
+  }else{
+    bE.dataset.t='What it is worth now';bE.dataset.a=money(val);bE.dataset.n=(inv>0?(val/inv*100).toFixed(1):'0')+'% of the money you put in';
+    xE.dataset.t='Loss';xE.dataset.a=smoney(profit);xE.dataset.n=pct(ret,2)+' on the money you put in';
+  }
+  $('#gbBase').style.width=(base/total*100).toFixed(2)+'%';
+  $('#gbExtra').style.width=(extra/total*100).toFixed(2)+'%';
+  $('#chartSub').textContent=fmtDate(first)+' to '+fmtDate(last)+'. Touch or hover over the chart to read any day.';
+  var what=(S.mode==='sip'?'SIP of '+money(S.amount)+' a month':'One-time '+money(S.amount))+' in '+S.fund.name;
+  $('#tableSub').textContent=what;
+  $('#printLine').textContent=what+', '+fmtDate(first)+' to '+fmtDate(last)+'.';
+}
+function buildAmtChips(){
+  var list=S.mode==='sip'?[1000,2000,5000,10000,25000,50000]:[10000,25000,50000,100000,500000,1000000];
+  $('#amtChips').innerHTML='<span class="pl">Quick amounts</span>'+list.map(function(a){return'<button type="button" class="chip" data-amt="'+a+'" aria-pressed="'+(a===S.amount)+'">'+money(a)+'</button>';}).join('');
+}
+
+/* ---------- picking a fund ---------- */
+function applySeries(f){
+  setSeries(f.days);
+  ['#sd','#stop','#ed'].forEach(function(id){$(id).min=iso(f.days[0]);$(id).max=iso(f.days[f.days.length-1]);});
+}
+function selectFund(row,jump){
+  var my=++loadSeq;
+  setReady(false);
+  showHead('<div class="status"><span class="spin"></span><span>Opening '+esc(row.name)+'…</span></div>');
+  loadHistory(row).then(function(h){
+    if(my!==loadSeq)return;
+    var f={row:row,name:row.name,days:h.days,nav:h.nav,st:fundStats(h.days,h.nav)};
+    S.fund=f;applySeries(f);
+    var last=h.days[h.days.length-1];
+    S.end=iso(last);S.start=iso(Math.max(h.days[0],last-3*365));S.stopAuto=true;S.stop=S.end;
+    heroReset=true;liveMsg=LIVE?'Saved NAVs to '+fmtDate(last)+'. Checking for newer ones…':'NAV data up to '+fmtDate(last)+'.';liveKind=LIVE?'busy':'';
+    setReady(true);
+    renderList();renderHead();syncInputs();update();
+    if(jump)showTab('calc');
+    if(LIVE)topUp(f,my);
+  }).catch(function(e){
+    if(my!==loadSeq)return;
+    showError((e&&e.message)||'Could not open this fund.');
+  });
+}
+function topUp(f,my){
+  var lastDay=f.days[f.days.length-1],today=Math.floor(Date.now()/864e5);
+  if(today<=lastDay){setLive('NAV data up to '+fmtDate(lastDay)+'.','');return;}
+  var ctl=new AbortController(),timer=setTimeout(function(){ctl.abort();},9000);
+  fetch('https://api.mfapi.in/mf/'+f.row.code+'?startDate='+iso(lastDay+1)+'&endDate='+iso(today),{signal:ctl.signal})
+   .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+   .then(function(j){
+     clearTimeout(timer);if(my!==loadSeq)return;
+     var h=parseHistory(j),dd=[],nn=[];
+     for(var i=0;i<h.days.length;i++){if(h.days[i]>lastDay){dd.push(h.days[i]);nn.push(h.nav[i]);}}
+     if(!dd.length){setLive('No newer NAV found. Latest is '+fmtDate(lastDay)+'.','');return;}
+     var wasEnd=S.end===iso(lastDay);
+     f.days=f.days.concat(dd);f.nav=f.nav.concat(nn);f.st=fundStats(f.days,f.nav);
+     var nl=f.days[f.days.length-1];
+     applySeries(f);if(wasEnd)S.end=iso(nl);
+     liveMsg='Updated live: added '+dd.length+' newer NAV'+(dd.length===1?'':'s')+', now to '+fmtDate(nl)+'.';liveKind='ok';
+     renderHead();syncInputs();update();
+   })
+   .catch(function(){
+     clearTimeout(timer);if(my!==loadSeq)return;
+     setLive('Using saved NAVs up to '+fmtDate(lastDay)+'. Could not reach the internet for newer ones.','warn');
+   });
+}
+
+/* ---------- controls ---------- */
+function syncStop(){$('#stop').value=S.stopAuto?S.end:S.stop;$('#stopReset').hidden=S.stopAuto;}
+function syncInputs(){
+  $('#sd').value=S.start;$('#ed').value=S.end;syncStop();$('#stopField').hidden=S.mode!=='sip';
+  var sip=S.mode==='sip';
+  $('#amtLbl').textContent=sip?'Monthly SIP amount':'Amount to invest';
+  $('#sdLbl').textContent=sip?'SIP starts on':'Invested on';
+  $('#amtHint').textContent=S.amount>0?money(S.amount)+(sip?' every month':' one time'):'';
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===S.mode));});
+  buildAmtChips();
+}
+function buildPresets(){
+  var box=$('#presets');
+  var td=document.createElement('button');td.type='button';td.className='chip';td.textContent='Till date';td.title='Value the investment on the latest available NAV date';
+  td.addEventListener('click',function(){if(!S.fund)return;S.end=iso(days[N-1]);syncInputs();update();});
+  box.appendChild(td);
+  [['1Y',1],['3Y',3],['5Y',5],['10Y',10],['Max',0]].forEach(function(p){
+    var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=p[0];
+    b.addEventListener('click',function(){
+      if(!S.fund)return;
+      var e=days[N-1],s=p[1]?Math.max(days[0],e-p[1]*365):days[0];
+      S.start=iso(s);S.end=iso(e);S.stopAuto=true;syncInputs();update();
+    });
+    box.appendChild(b);
+  });
+}
+function fatal(msg){
+  $('#badge').textContent='Cannot start';
+  showHead('<p class="eyebrow">Cannot start</p><p style="margin:0">'+esc(msg)+'</p>');
+}
+function wire(){
+  $('#pop').innerHTML=POPULAR.map(function(p){return'<button type="button" class="chip" data-pop="'+esc(p)+'">'+esc(p)+'</button>';}).join('');
+  buildPresets();
+  $('#pop').addEventListener('click',function(e){var b=e.target.closest('[data-pop]');if(!b)return;S.q=b.dataset.pop;$('#q').value=S.q;runSearch();});
+  $('#q').addEventListener('input',function(e){S.q=e.target.value;clearTimeout(searchTimer);searchTimer=setTimeout(runSearch,90);});
+  $('#q').addEventListener('keydown',function(e){if(e.key==='Enter'&&results.length){e.preventDefault();clearTimeout(searchTimer);runSearch();if(results.length)selectFund(results[0],true);}});
+  $('#amc').addEventListener('change',function(e){S.amc=+e.target.value;runSearch();});
+  $('#cat').addEventListener('change',function(e){S.cat=+e.target.value;runSearch();});
+  $('#planSeg').addEventListener('click',function(e){var b=e.target.closest('[data-plan]');if(!b)return;S.plan=b.dataset.plan;document.querySelectorAll('[data-plan]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});runSearch();});
+  $('#growthBtn').addEventListener('click',function(e){S.growth=!S.growth;e.currentTarget.setAttribute('aria-pressed',String(S.growth));runSearch();});
+  $('#inactiveBtn').addEventListener('click',function(e){S.hideDead=!S.hideDead;e.currentTarget.setAttribute('aria-pressed',String(S.hideDead));runSearch();});
+  $('#list').addEventListener('click',function(e){var b=e.target.closest('[data-i]');if(!b)return;selectFund(ROWS[+b.dataset.i],true);});
+  $('#filt').open=window.innerWidth>=960;
+  $('#head').addEventListener('click',function(e){if(e.target.closest('#goSearch'))showTab('find');});
+  var gt=document.createElement('div');gt.id='gtip';gt.setAttribute('role','status');document.body.appendChild(gt);
+  function gShow(el){
+    gt.innerHTML='<b>'+esc(el.dataset.t||'')+'</b><span class="ga">'+esc(el.dataset.a||'')+'</span><span class="gn">'+esc(el.dataset.n||'')+'</span>';
+    gt.className='on';var r=el.getBoundingClientRect(),w=gt.offsetWidth,h=gt.offsetHeight;
+    gt.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';
+    gt.style.top=Math.max(8,r.top-h-10)+'px';
+  }
+  function gHide(){gt.className='';}
+  $('#sum').addEventListener('pointerover',function(e){var s=e.target.closest('.gb-base,.gb-extra');if(s)gShow(s);});
+  $('#sum').addEventListener('pointerout',function(e){if(e.pointerType==='mouse'&&e.target.closest('.gb-base,.gb-extra'))gHide();});
+  $('#sum').addEventListener('focusin',function(e){var s=e.target.closest('.gb-base,.gb-extra');if(s)gShow(s);});
+  $('#sum').addEventListener('focusout',gHide);
+  document.addEventListener('pointerdown',function(e){if(!e.target.closest('.gb-base,.gb-extra'))gHide();});
+  window.addEventListener('scroll',gHide,{passive:true});
+  $('#tabs').addEventListener('click',function(e){var b=e.target.closest('[data-tab]');if(b)showTab(b.dataset.tab);});
+  document.querySelectorAll('[data-goto]').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.goto);});});
+  document.addEventListener('pointerdown',function(e){if(!e.target.closest('.chartwrap')){var x=$('#xh'),tp=$('#tip');if(x)x.classList.remove('on');if(tp)tp.classList.remove('on');}});
+  $('#more').addEventListener('click',function(){S.shown+=100;renderList();});
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){S.mode=b.dataset.mode;syncInputs();update();});});
+  $('#amtChips').addEventListener('click',function(e){var b=e.target.closest('[data-amt]');if(!b)return;S.amount=+b.dataset.amt;$('#amt').value=S.amount;$('#amtHint').textContent=money(S.amount)+(S.mode==='sip'?' every month':' one time');buildAmtChips();update();});
+  $('#amt').addEventListener('input',function(e){S.amount=parseFloat(e.target.value);buildAmtChips();$('#amtHint').textContent=S.amount>0?money(S.amount)+(S.mode==='sip'?' every month':' one time'):'';update();});
+  $('#sd').addEventListener('change',function(e){S.start=e.target.value;update();});
+  $('#ed').addEventListener('change',function(e){S.end=e.target.value;syncStop();update();});
+  $('#stop').addEventListener('change',function(e){S.stop=e.target.value;S.stopAuto=false;syncStop();update();});
+  $('#stopReset').addEventListener('click',function(){S.stopAuto=true;syncStop();update();});
+  $('#viewSeg').addEventListener('click',function(e){
+    var b=e.target.closest('[data-view]');if(!b)return;S.view=b.dataset.view;
+    document.querySelectorAll('[data-view]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+    if(LAST)renderTable(LAST);
+  });
+  $('#horSeg').addEventListener('click',function(e){
+    var b=e.target.closest('[data-h]');if(!b)return;S.horizon=+b.dataset.h;S.hlabel=S.horizon+(S.horizon===1?' year':' years');$('#hn').value='';$('#hd').value='';
+    document.querySelectorAll('[data-h]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+    if(LAST)renderProjection(LAST);
+  });
+  $('#cvSeg').addEventListener('click',function(e){var b=e.target.closest('[data-cv]');if(!b)return;S.cv=b.dataset.cv;S.cpick=null;document.querySelectorAll('[data-cv]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});redrawChart();});
+  $('#cvPick').addEventListener('change',function(e){S.cpick=+e.target.value;redrawChart();});
+  $('#cvPrev').addEventListener('click',function(){S.cpick-=1;redrawChart();});
+  $('#cvNext').addEventListener('click',function(){S.cpick+=1;redrawChart();});
+  function customH(){
+    var n=parseFloat($('#hn').value),u=$('#hu').value;if(!(n>0))return;
+    $('#hd').value='';
+    var yrs=u==='y'?n:u==='m'?n/12:n/365.25;
+    setHorizon(yrs,n+' '+(u==='y'?'year':u==='m'?'month':'day')+(n===1?'':'s'));
+  }
+  $('#hn').addEventListener('input',customH);$('#hu').addEventListener('change',customH);
+  $('#hd').addEventListener('change',function(e){
+    if(!LAST||!e.target.value)return;
+    var end=LAST.dayA[LAST.len-1],d=parseISO(e.target.value);if(isNaN(d)||d<=end)return;
+    $('#hn').value='';
+    setHorizon((d-end)/365.25,'to '+fmtDate(d));
+  });
+  $('#cont').addEventListener('change',function(e){S.cont=e.target.checked;if(LAST)renderProjection(LAST);});
+  if(BUILD!=='lite')$('#printBtn').addEventListener('click',function(){window.print();});else $('#printBtn').hidden=true;
+  if(window.ResizeObserver){
+    new ResizeObserver(function(){var w=Math.floor($('#chart').clientWidth);if(LAST&&w&&Math.abs(w-(+$('#chart').dataset.w||0))>1)drawChart(LAST);}).observe($('#chart'));
+  }
+}
+function boot(){
+  if(typeof DecompressionStream==='undefined'||!window.Blob||!Blob.prototype.stream){fatal('This browser is too old to open the fund data. Please use a recent version of Chrome, Edge, Safari or Firefox.');return;}
+  inflate(b64ToBytes($('#meta').textContent.trim())).then(function(bytes){
+    var meta=JSON.parse(new TextDecoder().decode(bytes));
+    AMCS=meta.amcs;CATS=meta.cats;
+    ROWS=meta.rows.map(function(r,i){
+      var o={i:i,code:r[0],name:r[1],amc:r[2],cat:r[3],type:r[4],direct:r[5]===1,opt:r[6],aum:r[7],min:r[8],launch:r[9],last:r[10],first:r[11],n:r[12],dp:r[13]==null?4:r[13]};
+      o.lname=o.name.toLowerCase();o.key=o.lname+' '+AMCS[o.amc].toLowerCase()+' '+CATS[o.cat].toLowerCase()+' '+o.code;
+      if(o.last>DATA_END)DATA_END=o.last;return o;
+    });
+    DATA_END=meta.dataEnd||DATA_END;
+    ROWS.forEach(function(r){r.dead=r.last<DATA_END-45;});
+    var ac={},cc={};ROWS.forEach(function(r){ac[r.amc]=(ac[r.amc]||0)+1;cc[r.cat]=(cc[r.cat]||0)+1;});
+    var ai=AMCS.map(function(_,i){return i;}).sort(function(a,b){return AMCS[a]<AMCS[b]?-1:1;});
+    var ci=CATS.map(function(_,i){return i;}).sort(function(a,b){return catShort(CATS[a])<catShort(CATS[b])?-1:1;});
+    $('#amc').innerHTML='<option value="-1">All fund houses ('+AMCS.length+')</option>'+ai.map(function(i){return'<option value="'+i+'">'+esc(AMCS[i])+' ('+IN.format(ac[i])+')</option>';}).join('');
+    $('#cat').innerHTML='<option value="-1">All categories ('+CATS.length+')</option>'+ci.map(function(i){return'<option value="'+i+'">'+esc(catShort(CATS[i]))+' ('+IN.format(cc[i])+')</option>';}).join('');
+    $('#badge').textContent=BUILD==='archive'?IN.format(ROWS.length)+' closed or matured funds':IN.format(ROWS.length)+' funds · NAVs to '+fmtDate(DATA_END);
+    $('#banner').textContent=BUILD==='web'
+      ?IN.format(ROWS.length)+' active mutual fund schemes (growth and dividend options, direct and regular) with their full NAV history, up to '+fmtDate(DATA_END)+'. This page refreshes itself every evening from the NAVs that AMFI India publishes, and newly launched schemes are added as they appear. Closed and matured schemes are not included.'
+      :BUILD==='full'
+      ?'All '+IN.format(ROWS.length)+' active mutual fund schemes (growth and dividend options, direct and regular) are saved inside this file, from each fund’s launch to '+fmtDate(DATA_END)+'. It works offline. When you are online, the latest NAVs for the fund you open are added automatically. Closed and matured schemes are in a separate file.'
+      :BUILD==='mobile'
+      ?IN.format(ROWS.length)+' active funds (growth and other non-dividend options) with their last 10 years of NAVs, up to '+fmtDate(DATA_END)+'. It works offline. When you are online, the latest NAVs for the fund you open are added automatically.'
+      :BUILD==='archive'
+      ?'This file holds '+IN.format(ROWS.length)+' schemes that have stopped publishing NAVs (matured plans, merged and closed funds), with their full history. For current funds, use the main file.'
+      :'This preview holds '+IN.format(ROWS.length)+' active funds (growth and other non-dividend options) with their last 10 years of NAVs, up to '+fmtDate(DATA_END)+'. The downloadable version has every active fund with the full history, and adds live NAVs when online.';
+    $('#foot').textContent='Samvriddhi Finance · AMFI Registered Mutual Fund Distributor · ARN 371388. NAV data: AMFI India, via the open MIT-licensed Mutual_Fund_Data dataset. Scheme details may lag the fund houses’ own factsheets. Mutual fund investments are subject to market risks.';
+    $('#q').disabled=false;
+    wire();runSearch();
+    var pick=ROWS.filter(function(r){return r.lname.indexOf('parag parikh flexi cap')===0&&r.opt===0&&!r.dead;})[0]||results[0];
+    if(pick){S.q='';selectFund(pick);}
+  }).catch(function(e){fatal('The fund data inside this file could not be read ('+((e&&e.message)||'unknown error')+'). Try downloading the file again.');});
+}
+boot();
+})();
+</script>
+<!--BODY_END-->
