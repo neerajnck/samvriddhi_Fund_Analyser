@@ -72,26 +72,42 @@ def parse_day(s):
         return None
 
 def parse_amfi(text):
-    """Yields (code, name, nav, day, amc, category, type) from AMFI's semicolon text files (daily file or history report)."""
+    """Yields (code, name, nav, day, amc, category, type) from AMFI's semicolon text files (daily file or history report).
+    Columns are found from the header line, so added or reordered columns do not matter."""
     amc = cat = typ = ''
+    cols = None
     for raw in text.splitlines():
         line = raw.strip()
         if not line: continue
         if ';' in line:
             p = [x.strip() for x in line.split(';')]
-            if not p[0].isdigit() or len(p) < 6: continue
+            if p[0].lower().startswith('scheme code'):
+                cols = {h.lower(): i for i, h in enumerate(p)}
+                continue
+            if not p[0].isdigit(): continue
+            if cols and 'net asset value' in cols and 'scheme name' in cols and 'date' in cols:
+                ni, si, di = cols['net asset value'], cols['scheme name'], cols['date']
+            elif len(p) == 6: ni, si, di = 4, 3, 5
+            elif len(p) == 8: ni, si, di = 4, 1, 7
+            else: continue
+            if len(p) <= max(ni, si, di): continue
             try:
-                nav = float(p[4].replace(',', ''))
+                nav = float(p[ni].replace(',', ''))
             except ValueError:
                 continue
-            day = parse_day(p[-1])
+            day = parse_day(p[di])
             if day is None or nav <= 0: continue
-            name = p[3] if len(p) == 6 else p[1]
+            name = p[si]
+            if cols:
+                for key in ('plan', 'option'):
+                    k = cols.get(key)
+                    if k is not None and k < len(p) and p[k] and p[k].lower() not in name.lower():
+                        name += ' - ' + p[k]
             yield int(p[0]), name, nav, day, amc, cat, typ
             continue
         m = TYPE_RE.match(line)
         if m:
-            typ = m.group(1).title().replace('Interval Fund', 'Interval Fund'); cat = m.group(2).strip()
+            typ = m.group(1).title(); cat = m.group(2).strip()
         else:
             amc = line
 
@@ -251,4 +267,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
